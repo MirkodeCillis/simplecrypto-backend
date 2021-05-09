@@ -14,11 +14,11 @@ public class User {
     private String username;
 
     @NotEmpty
-    @Column(length = 320)
+    @Column(length = 320, unique = true)
     private String email;
 
     @NotEmpty
-    @Column(length = 256)
+    @Column(length = 60)
     private String password;
 
     public User(String username, String email, String password) {

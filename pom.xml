@@ -40,6 +40,16 @@
             <artifactId>hibernate-validator</artifactId>
             <version>5.2.4.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>4.1.4.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>5.3.4</version>
+        </dependency>
     </dependencies>
 
     <build>
