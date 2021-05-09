@@ -1,0 +1,60 @@
+package com.simplecrypto.server.domains;
+
+import javax.persistence.*;
+
+@Entity
+public class Cryptocurrency {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
+    @Column(length = 30)
+    private String nome;
+
+    @Column(length = 5)
+    private String codice;
+
+    private Float valore;
+
+    public Cryptocurrency(String nome, String codice, Float valore) {
+        this.nome = nome;
+        this.codice = codice;
+        this.valore = valore;
+    }
+
+    public Cryptocurrency() {
+
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCodice() {
+        return codice;
+    }
+
+    public void setCodice(String codice) {
+        this.codice = codice;
+    }
+
+    public Float getValore() {
+        return valore;
+    }
+
+    public void setValore(Float valore) {
+        this.valore = valore;
+    }
+}

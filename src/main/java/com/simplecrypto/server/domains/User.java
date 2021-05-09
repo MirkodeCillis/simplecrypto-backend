@@ -1,9 +1,7 @@
 package com.simplecrypto.server.domains;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 public class User {
@@ -11,10 +9,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @NotEmpty
+    @Column(length = 30)
     private String username;
 
+    @NotEmpty
+    @Column(length = 320)
     private String email;
 
+    @NotEmpty
+    @Column(length = 256)
     private String password;
 
     public User(String username, String email, String password) {
