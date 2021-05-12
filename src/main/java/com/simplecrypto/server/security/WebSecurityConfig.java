@@ -1,5 +1,7 @@
 package com.simplecrypto.server.security;
 
+import com.simplecrypto.server.domains.User;
+import com.simplecrypto.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,9 +50,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public UserDetailsService userDetailsServiceBean() {
         return new UserDetailsService() {
+
+            @Autowired
+            private UserRepository userRepository;
+
             @Override
-            public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-                return null;
+            public UserDetails loadUserByUsername(String username) {
+                User user = userRepository.findByUsername(username);
+                if (user == null) {
+                    throw new UsernameNotFoundException(username);
+                }
+                return new UserDetailsPrincipal(user);
             }
         };
     }
