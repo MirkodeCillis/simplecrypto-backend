@@ -47,10 +47,12 @@ public class AuthCtrl {
 
         User user = userRepository.findByEmail(authenticationRequest.getEmail());
 
-        if (user != null) {
-            if (!passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword())){
-                return new ResponseEntity("Bad Credentials", HttpStatus.BAD_REQUEST);
-            }
+        if (user == null) {
+            return new ResponseEntity("User not found", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (!passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword())){
+            return new ResponseEntity("Bad Credentials", HttpStatus.UNAUTHORIZED);
         }
 
         // Genero Token
