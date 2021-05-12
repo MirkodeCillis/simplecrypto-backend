@@ -11,11 +11,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class Config {
 
     @Bean
-    public PasswordEncoder pwdEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override

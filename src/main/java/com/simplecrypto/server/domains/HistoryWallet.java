@@ -22,7 +22,7 @@ public class HistoryWallet {
     private Float valore;
 
     @NotEmpty
-    @JsonFormat(pattern = "dd-MM-yyyy", timezone = "CET")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss", timezone = "CET")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date", insertable = true, updatable = false)
