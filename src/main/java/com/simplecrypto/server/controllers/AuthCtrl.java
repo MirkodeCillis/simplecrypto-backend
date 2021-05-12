@@ -1,28 +1,27 @@
 package com.simplecrypto.server.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.simplecrypto.server.domains.User;
+import com.simplecrypto.server.repository.UserRepository;
 import com.simplecrypto.server.security.JwtAuthenticationRequest;
 import com.simplecrypto.server.security.JwtAuthenticationResponse;
 import com.simplecrypto.server.security.JwtTokenUtil;
+import com.simplecrypto.server.security.JwtUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collection;
 
 @Controller
 @RequestMapping(path = "/api/auth")
@@ -32,7 +31,10 @@ public class AuthCtrl {
     private String tokenHeader;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -43,37 +45,25 @@ public class AuthCtrl {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) throws AuthenticationException, JsonProcessingException {
 
-        // Effettuo l autenticazione
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getUsername(),
-                        authenticationRequest.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        User user = userRepository.findByUsername(authenticationRequest.getUsername());
+
+        if (user != null) {
+            if (!passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword())){
+                return new ResponseEntity("Bad Credentials", HttpStatus.BAD_REQUEST);
+            }
+        }
 
         // Genero Token
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        final JwtUser userDetails = (JwtUser) userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        response.setHeader(tokenHeader,token);
+
+        MultiValueMap<String, String> headers = new HttpHeaders();
+        // Sets our custom response header
+        headers.add(tokenHeader, token);
+        headers.add("Access-Control-Expose-Headers", tokenHeader);
+//        response.setHeader(tokenHeader, token);
         // Ritorno il token
-        return ResponseEntity.ok(new JwtAuthenticationResponse(userDetails.getUsername(),userDetails.getAuthorities()));
-    }
-
-    @RequestMapping(value = "protected/refresh-token", method = RequestMethod.GET)
-    public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request, HttpServletResponse response) {
-        String token = request.getHeader(tokenHeader);
-        UserDetails userDetails =
-                (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (jwtTokenUtil.canTokenBeRefreshed(token)) {
-            String refreshedToken = jwtTokenUtil.refreshToken(token);
-            response.setHeader(tokenHeader,refreshedToken);
-
-            return ResponseEntity.ok(new JwtAuthenticationResponse(userDetails.getUsername(),userDetails.getAuthorities()));
-        } else {
-            return ResponseEntity.badRequest().body(null);
-        }
+        return new ResponseEntity(new JwtAuthenticationResponse(userDetails.getUsername(), userDetails.getEmail()), headers, HttpStatus.OK);
     }
 
 }

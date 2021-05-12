@@ -11,24 +11,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
 
-    static final String CLAIM_KEY_USERNAME = "sub";
-    static final String CLAIM_KEY_AUDIENCE = "audience";
+    static final String CLAIM_KEY_USERNAME = "username";
     static final String CLAIM_KEY_CREATED = "iat";
-    static final String CLAIM_KEY_AUTHORITIES = "roles";
-    static final String CLAIM_KEY_IS_ENABLED = "isEnabled";
-
-    private static final String AUDIENCE_UNKNOWN = "unknown";
-    private static final String AUDIENCE_WEB = "web";
-    private static final String AUDIENCE_MOBILE = "mobile";
-    private static final String AUDIENCE_TABLET = "tablet";
+    static final String CLAIM_KEY_EMAIL = "email";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -91,17 +85,6 @@ public class JwtTokenUtil implements Serializable {
         return expiration;
     }
 
-    public String getAudienceFromToken(String token) {
-        String audience;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            audience = (String) claims.get(CLAIM_KEY_AUDIENCE);
-        } catch (Exception e) {
-            audience = null;
-        }
-        return audience;
-    }
-
     private Claims getClaimsFromToken(String token) {
         Claims claims;
         try {
@@ -124,18 +107,11 @@ public class JwtTokenUtil implements Serializable {
         return expiration.before(new Date());
     }
 
-    private Boolean ignoreTokenExpiration(String token) {
-        String audience = getAudienceFromToken(token);
-        return (AUDIENCE_TABLET.equals(audience) || AUDIENCE_MOBILE.equals(audience));
-    }
-
-    public String generateToken(UserDetails userDetails) throws JsonProcessingException {
+    public String generateToken(JwtUser userDetails) throws JsonProcessingException {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+        claims.put(CLAIM_KEY_EMAIL, userDetails.getEmail());
         claims.put(CLAIM_KEY_CREATED, new Date());
-        List<String> auth =userDetails.getAuthorities().stream().map(role-> role.getAuthority()).collect(Collectors.toList());
-        claims.put(CLAIM_KEY_AUTHORITIES, auth);
-        claims.put(CLAIM_KEY_IS_ENABLED,userDetails.isEnabled());
 
         return generateToken(claims);
     }
@@ -152,7 +128,7 @@ public class JwtTokenUtil implements Serializable {
 
     public Boolean canTokenBeRefreshed(String token) {
         final Date created = getCreatedDateFromToken(token);
-        return  (!isTokenExpired(token) || ignoreTokenExpiration(token));
+        return  (!isTokenExpired(token));
     }
 
     public String refreshToken(String token) {

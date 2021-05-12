@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-
 @Controller
 @RequestMapping(path = "/api/user")
 public class UserCtrl {
@@ -42,8 +41,5 @@ public class UserCtrl {
     public @ResponseBody Iterable<User> getAllUsers() {
         return userService.getAll();
     }
-
-//    @PostMapping(path = "/login")
-//    public String
 
 }
