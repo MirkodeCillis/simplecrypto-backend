@@ -45,7 +45,7 @@ public class AuthCtrl {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) throws AuthenticationException, JsonProcessingException {
 
-        User user = userRepository.findByUsername(authenticationRequest.getUsername());
+        User user = userRepository.findByEmail(authenticationRequest.getEmail());
 
         if (user != null) {
             if (!passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword())){
@@ -54,14 +54,13 @@ public class AuthCtrl {
         }
 
         // Genero Token
-        final JwtUser userDetails = (JwtUser) userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        final JwtUser userDetails = (JwtUser) userDetailsService.loadUserByUsername(user.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
 
         MultiValueMap<String, String> headers = new HttpHeaders();
         // Sets our custom response header
         headers.add(tokenHeader, token);
         headers.add("Access-Control-Expose-Headers", tokenHeader);
-//        response.setHeader(tokenHeader, token);
         // Ritorno il token
         return new ResponseEntity(new JwtAuthenticationResponse(userDetails.getUsername(), userDetails.getEmail()), headers, HttpStatus.OK);
     }
