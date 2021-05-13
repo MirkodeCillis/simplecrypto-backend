@@ -2,6 +2,7 @@ package com.simplecrypto.server.domains;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +12,6 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @NotEmpty
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

@@ -8,8 +8,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional
-@Service("TemplateService")
+@Service("UserService")
 public class UserService {
 
     @Autowired
@@ -29,5 +31,9 @@ public class UserService {
 
     public Iterable<User> getAll() {
         return userRepository.findAll();
+    }
+
+    public Optional<User> findById(Integer id) {
+        return userRepository.findById(id);
     }
 }

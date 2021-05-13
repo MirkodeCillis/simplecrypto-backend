@@ -38,7 +38,7 @@ public class JwtTokenUtil implements Serializable {
         String username;
         try {
             final Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
+            username = (String) claims.get(CLAIM_KEY_USERNAME);
         } catch (Exception e) {
             username = null;
         }
@@ -52,10 +52,10 @@ public class JwtTokenUtil implements Serializable {
         }
         try {
             final Claims claims = getClaimsFromToken(token);
-            final String email = "";
             return new JwtUser(
-                    (Integer) claims.get("id"), claims.getSubject(),
-                    email,
+                    (Integer) claims.get(CLAIM_KEY_ID),
+                    (String) claims.get(CLAIM_KEY_USERNAME),
+                    (String) claims.get(CLAIM_KEY_EMAIL),
                     ""
             );
         } catch (Exception e) {
