@@ -23,6 +23,7 @@ public class JwtTokenUtil implements Serializable {
     static final String CLAIM_KEY_USERNAME = "username";
     static final String CLAIM_KEY_CREATED = "iat";
     static final String CLAIM_KEY_EMAIL = "email";
+    static final String CLAIM_KEY_ID = "id";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -53,7 +54,7 @@ public class JwtTokenUtil implements Serializable {
             final Claims claims = getClaimsFromToken(token);
             final String email = "";
             return new JwtUser(
-                    claims.getSubject(),
+                    (Integer) claims.get("id"), claims.getSubject(),
                     email,
                     ""
             );
@@ -109,6 +110,7 @@ public class JwtTokenUtil implements Serializable {
 
     public String generateToken(JwtUser userDetails) throws JsonProcessingException {
         Map<String, Object> claims = new HashMap<>();
+        claims.put(CLAIM_KEY_ID, userDetails.getId());
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
         claims.put(CLAIM_KEY_EMAIL, userDetails.getEmail());
         claims.put(CLAIM_KEY_CREATED, new Date());

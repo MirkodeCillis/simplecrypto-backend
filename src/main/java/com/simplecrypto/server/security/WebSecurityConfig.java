@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() {
         return new JwtAuthenticationTokenFilter();
     }
 
@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 if (user == null) {
                     throw new UsernameNotFoundException(username);
                 }
-                return new JwtUser(user.getUsername(), user.getEmail(), user.getPassword());
+                return new JwtUser(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
             }
         };
     }

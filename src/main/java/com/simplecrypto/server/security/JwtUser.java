@@ -8,14 +8,17 @@ import java.util.Collection;
 
 public class JwtUser implements UserDetails {
 
+    private final Integer id;
     private final String username;
     private final String email;
     private final String password;
 
     public JwtUser(
+            Integer id,
             String username,
             String email,
             String password) {
+        this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
@@ -57,5 +60,9 @@ public class JwtUser implements UserDetails {
 
     public String getEmail() {
         return email;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }
