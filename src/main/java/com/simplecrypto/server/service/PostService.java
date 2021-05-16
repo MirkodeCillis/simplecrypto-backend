@@ -4,6 +4,8 @@ import com.simplecrypto.server.domains.Post;
 import com.simplecrypto.server.models.PostModel;
 import com.simplecrypto.server.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,5 +26,9 @@ public class PostService {
                 postModel.getMessage());
 
         return postRepository.save(post);
+    }
+
+    public Page<Post> getAll(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
 }
