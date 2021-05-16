@@ -10,15 +10,15 @@ public class User {
     private Integer id;
 
     @NotEmpty
-    @Column(length = 30)
+    @Column(length = 30, nullable = false)
     private String username;
 
     @NotEmpty
-    @Column(length = 320, unique = true)
+    @Column(length = 320, unique = true, nullable = false)
     private String email;
 
     @NotEmpty
-    @Column(length = 60)
+    @Column(length = 60, nullable = false)
     private String password;
 
     public User(String username, String email, String password) {

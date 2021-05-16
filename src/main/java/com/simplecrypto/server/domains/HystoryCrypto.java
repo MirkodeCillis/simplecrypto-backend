@@ -15,16 +15,17 @@ public class HystoryCrypto {
 
     @NotEmpty
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "crypto_id")
+    @JoinColumn(name = "crypto_id", nullable = false)
     private Cryptocurrency cryptocurrency;
 
     @NotEmpty
+    @Column(name = "value", nullable = false)
     private Float valore;
 
     @JsonFormat(pattern = "dd-MM-yyyy", timezone = "CET")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date", insertable = true, updatable = false)
+    @Column(name = "date", insertable = false, updatable = false)
     private Date date;
 
     public HystoryCrypto(Cryptocurrency cryptocurrency, Float valore) {
@@ -58,5 +59,13 @@ public class HystoryCrypto {
 
     public void setValore(Float valore) {
         this.valore = valore;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

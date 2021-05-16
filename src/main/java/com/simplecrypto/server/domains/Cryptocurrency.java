@@ -8,12 +8,13 @@ public class Cryptocurrency {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(length = 30)
+    @Column(length = 30, nullable = false)
     private String nome;
 
-    @Column(length = 5)
+    @Column(length = 5, nullable = false)
     private String codice;
 
+    @Column(name = "value", nullable = false)
     private Float valore;
 
     public Cryptocurrency(String nome, String codice, Float valore) {

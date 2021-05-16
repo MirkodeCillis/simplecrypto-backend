@@ -2,8 +2,6 @@ package com.simplecrypto.server.domains;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class Comment {
@@ -22,8 +20,7 @@ public class Comment {
     private Post post;
 
     @NotEmpty
+    @Column(nullable = false)
     private String message;
 
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy="comment", fetch = FetchType.LAZY)
-    private Set<LikeComment> likeComments = new HashSet<>();
 }

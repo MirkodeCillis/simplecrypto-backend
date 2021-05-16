@@ -15,17 +15,18 @@ public class HistoryWallet {
 
     @NotEmpty
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @NotEmpty
+    @Column(name = "value", nullable = false)
     private Float valore;
 
     @NotEmpty
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss", timezone = "CET")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date", insertable = true, updatable = false)
+    @Column(name = "date", insertable = false, updatable = false)
     private Date date;
 
     public HistoryWallet(User user, Float valore) {
@@ -59,5 +60,13 @@ public class HistoryWallet {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

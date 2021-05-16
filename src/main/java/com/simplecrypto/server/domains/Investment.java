@@ -12,15 +12,16 @@ public class Investment {
 
     @NotEmpty
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @NotEmpty
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "crypto_id")
+    @JoinColumn(name = "crypto_id", nullable = false)
     private Cryptocurrency cryptocurrency;
 
     @NotEmpty
+    @Column(name = "importo", nullable = false)
     private Float importo;
 
     public Investment(User user, Cryptocurrency cryptocurrency, Float importo) {

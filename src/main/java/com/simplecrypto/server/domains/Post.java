@@ -1,8 +1,12 @@
 package com.simplecrypto.server.domains;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,14 +17,21 @@ public class Post {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @NotEmpty
+    @Column(nullable = false)
     private String message;
 
+    @JsonFormat(pattern = "dd-MM-yyyy", timezone = "CET")
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "published_at", insertable = false, updatable = false)
+    private Date publishedAt;
+
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy="post", fetch = FetchType.LAZY)
-    private Set<LikePost> likePosts = new HashSet<>();
+    private Set<Comment> comments = new HashSet<>();
 
     public Post(User user, String message) {
         this.user = user;
@@ -55,11 +66,19 @@ public class Post {
         this.message = message;
     }
 
-    public Set<LikePost> getLikePosts() {
-        return likePosts;
+    public Date getPublishedAt() {
+        return publishedAt;
     }
 
-    public void setLikePosts(Set<LikePost> likePosts) {
-        this.likePosts = likePosts;
+    public void setPublishedAt(Date publishedAt) {
+        this.publishedAt = publishedAt;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }
