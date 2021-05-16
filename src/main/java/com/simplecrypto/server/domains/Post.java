@@ -27,7 +27,7 @@ public class Post {
     @JsonFormat(pattern = "dd-MM-yyyy", timezone = "CET")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "published_at", insertable = false, updatable = false)
+    @Column(name = "published_at", nullable = false, updatable = false)
     private Date publishedAt;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy="post", fetch = FetchType.LAZY)
@@ -36,6 +36,7 @@ public class Post {
     public Post(User user, String message) {
         this.user = user;
         this.message = message;
+        this.publishedAt = new Date();
     }
 
     public Post() {

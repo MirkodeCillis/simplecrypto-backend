@@ -1,6 +1,7 @@
 package com.simplecrypto.server.models;
 
 public class PostModel {
+
     private Integer userId;
 
     private String message;
