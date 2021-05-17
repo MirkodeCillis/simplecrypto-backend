@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +23,7 @@ public class Post {
     @Column(nullable = false)
     private String message;
 
-    @JsonFormat(pattern = "dd-MM-yyyy", timezone = "CET")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "CET")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "published_at", nullable = false, updatable = false)
