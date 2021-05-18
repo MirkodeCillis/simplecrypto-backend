@@ -44,13 +44,24 @@ public class PostCtrl {
         }
     }
 
-    @GetMapping(path = "/get")
+    @GetMapping(path = "/getlist")
     public ResponseEntity<?> getAllPosts(
             @PageableDefault(value = 15, sort = "publishedAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         try {
             Page<Post> posts = postService.getAll(pageable);
             return new ResponseEntity<>(posts, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(path = "/get")
+    public ResponseEntity<?> getPost(@RequestParam Integer id) {
+        try {
+            Post post = postService.getById(id).get();
+            return new ResponseEntity<>(post, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);

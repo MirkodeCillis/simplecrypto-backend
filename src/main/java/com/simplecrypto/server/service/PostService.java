@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional
 @Service("PostService")
 public class PostService {
@@ -30,5 +32,9 @@ public class PostService {
 
     public Page<Post> getAll(Pageable pageable) {
         return postRepository.findAll(pageable);
+    }
+
+    public Optional<Post> getById(Integer id) {
+        return postRepository.findById(id);
     }
 }

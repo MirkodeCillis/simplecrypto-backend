@@ -14,13 +14,11 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @NotEmpty
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @JsonIgnore
-    @NotEmpty
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
@@ -29,7 +27,7 @@ public class Comment {
     @Column(nullable = false)
     private String message;
 
-    @JsonFormat(pattern = "dd-MM-yyyy", timezone = "CET")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "CET")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "published_at", nullable = false, updatable = false)
