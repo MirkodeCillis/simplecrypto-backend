@@ -1,6 +1,5 @@
 package com.simplecrypto.server.controllers;
 
-import com.simplecrypto.server.domains.Comment;
 import com.simplecrypto.server.domains.Post;
 import com.simplecrypto.server.domains.User;
 import com.simplecrypto.server.exception.UserNotFoundException;

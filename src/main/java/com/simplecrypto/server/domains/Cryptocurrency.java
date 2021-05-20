@@ -20,6 +20,7 @@ public class Cryptocurrency {
     private Float valore;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy="cryptocurrency", fetch = FetchType.LAZY)
+    @OrderBy("date ASC")
     private Set<HystoryCrypto> hystory = new HashSet<>();
 
     public Cryptocurrency(String nome, String codice, Float valore) {

@@ -20,4 +20,8 @@ public class CryptoService {
     public Cryptocurrency save(Cryptocurrency currency) {
         return cryptoRepository.save(currency);
     }
+
+    public Cryptocurrency findByCodice(String codice) {
+        return cryptoRepository.findByCodice(codice);
+    }
 }
