@@ -1,6 +1,6 @@
 package com.simplecrypto.server.domains;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -10,17 +10,15 @@ public class Investment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @NotEmpty
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @NotEmpty
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "crypto_id", nullable = false)
     private Cryptocurrency cryptocurrency;
 
-    @NotEmpty
     @Column(name = "importo", nullable = false)
     private Float importo;
 

@@ -39,7 +39,7 @@ public class UserCtrl {
 
     @GetMapping(path = "/all")
     public @ResponseBody Iterable<User> getAllUsers() {
-        return userService.getAll();
+        return userService.findAll();
     }
 
 }

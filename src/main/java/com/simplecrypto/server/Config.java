@@ -42,6 +42,6 @@ public class Config {
 
     @Scheduled(fixedRateString = "${fixedDelay.in.milliseconds}")
     public void getCryptoValues() {
-        utils.getCurrentValues();
+        utils.updateValues();
     }
 }

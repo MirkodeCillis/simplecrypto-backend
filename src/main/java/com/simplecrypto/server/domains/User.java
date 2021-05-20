@@ -3,6 +3,9 @@ package com.simplecrypto.server.domains;
 import javax.persistence.*;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 public class User {
     @Id
@@ -20,6 +23,12 @@ public class User {
     @NotEmpty
     @Column(length = 60, nullable = false)
     private String password;
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy="user", fetch = FetchType.EAGER)
+    private Set<Investment> investments = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy="user", fetch = FetchType.EAGER)
+    private Set<HistoryWallet> historyWallet = new HashSet<>();
 
     public User(String username, String email, String password) {
         this.username = username;
@@ -63,5 +72,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Investment> getInvestments() {
+        return investments;
+    }
+
+    public void setInvestments(Set<Investment> investments) {
+        this.investments = investments;
+    }
+
+    public Set<HistoryWallet> getHistoryWallet() {
+        return historyWallet;
+    }
+
+    public void setHistoryWallet(Set<HistoryWallet> historyWallet) {
+        this.historyWallet = historyWallet;
     }
 }

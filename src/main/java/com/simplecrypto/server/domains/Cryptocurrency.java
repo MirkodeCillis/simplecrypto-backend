@@ -21,7 +21,7 @@ public class Cryptocurrency {
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy="cryptocurrency", fetch = FetchType.LAZY)
     @OrderBy("date ASC")
-    private Set<HystoryCrypto> hystory = new HashSet<>();
+    private Set<HistoryCrypto> history = new HashSet<>();
 
     public Cryptocurrency(String nome, String codice, Float valore) {
         this.nome = nome;
@@ -65,11 +65,11 @@ public class Cryptocurrency {
         this.valore = valore;
     }
 
-    public Set<HystoryCrypto> getHystory() {
-        return hystory;
+    public Set<HistoryCrypto> getHistory() {
+        return history;
     }
 
-    public void setHystory(Set<HystoryCrypto> hystory) {
-        this.hystory = hystory;
+    public void setHistory(Set<HistoryCrypto> history) {
+        this.history = history;
     }
 }

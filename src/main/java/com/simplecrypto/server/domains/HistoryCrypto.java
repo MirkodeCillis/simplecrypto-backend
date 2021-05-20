@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
-public class HystoryCrypto {
+public class HistoryCrypto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -28,13 +28,13 @@ public class HystoryCrypto {
     @Column(name = "date", updatable = false, nullable = false)
     private Date date;
 
-    public HystoryCrypto(Cryptocurrency cryptocurrency, Float valore) {
+    public HistoryCrypto(Cryptocurrency cryptocurrency, Float valore) {
         this.cryptocurrency = cryptocurrency;
         this.valore = valore;
         this.date = new Date();
     }
 
-    public HystoryCrypto() {
+    public HistoryCrypto() {
 
     }
 

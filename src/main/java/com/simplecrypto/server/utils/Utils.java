@@ -1,10 +1,14 @@
 package com.simplecrypto.server.utils;
 
 import com.simplecrypto.server.domains.Cryptocurrency;
-import com.simplecrypto.server.domains.HystoryCrypto;
+import com.simplecrypto.server.domains.HistoryWallet;
+import com.simplecrypto.server.domains.HistoryCrypto;
+import com.simplecrypto.server.domains.User;
 import com.simplecrypto.server.models.CurrencyAPI;
 import com.simplecrypto.server.service.CryptoService;
-import com.simplecrypto.server.service.HystoryCryptoService;
+import com.simplecrypto.server.service.HistoryCryptoService;
+import com.simplecrypto.server.service.HistoryWalletService;
+import com.simplecrypto.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -23,25 +27,41 @@ public class Utils {
     CryptoService cryptoService;
 
     @Autowired
-    HystoryCryptoService hystoryCryptoService;
+    HistoryCryptoService historyCryptoService;
 
-    public void getCurrentValues() {
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    HistoryWalletService historyWalletService;
+
+    public void updateValues() {
 
         RestTemplate restTemplate = new RestTemplate();
 
         Iterable<Cryptocurrency> currencies = cryptoService.findAll();
 
-        // update values in cryptocurrency table
         currencies.forEach(currency -> {
             CurrencyAPI currentValue = restTemplate.getForObject(uriCurrencies + currency.getCodice(), CurrencyAPI.class);
 
+            // update values in cryptocurrency table
             currency.setValore(currentValue.getPrice());
             cryptoService.save(currency);
 
-            // add entries in hystory_crypto
-            HystoryCrypto hcEntry = new HystoryCrypto(currency, currency.getValore());
-            hystoryCryptoService.save(hcEntry);
+            // add entries in history_crypto
+            HistoryCrypto hc = new HistoryCrypto(currency, currency.getValore());
+            historyCryptoService.save(hc);
         });
 
+        Iterable<User> users = userService.findAll();
+
+        users.forEach(user -> {
+            final float[] current_wallet = {0};
+            user.getInvestments().forEach(investment -> {
+                current_wallet[0] += investment.getImporto() * investment.getCryptocurrency().getValore();
+            });
+            HistoryWallet hw = new HistoryWallet(user, current_wallet[0]);
+            historyWalletService.save(hw);
+        });
     }
 }

@@ -1,7 +1,7 @@
 package com.simplecrypto.server.domains;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.validator.constraints.NotEmpty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -13,20 +13,18 @@ public class HistoryWallet {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @NotEmpty
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @NotEmpty
     @Column(name = "value", nullable = false)
     private Float valore;
 
-    @NotEmpty
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss", timezone = "CET")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date", insertable = false, updatable = false)
+    @Column(name = "date", nullable = false, updatable = false)
     private Date date;
 
     public HistoryWallet(User user, Float valore) {
