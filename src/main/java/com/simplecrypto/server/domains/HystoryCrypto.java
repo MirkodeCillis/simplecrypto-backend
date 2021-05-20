@@ -1,6 +1,7 @@
 package com.simplecrypto.server.domains;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -13,24 +14,24 @@ public class HystoryCrypto {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @NotEmpty
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crypto_id", nullable = false)
     private Cryptocurrency cryptocurrency;
 
-    @NotEmpty
     @Column(name = "value", nullable = false)
     private Float valore;
 
-    @JsonFormat(pattern = "dd-MM-yyyy", timezone = "CET")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "CET")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date", insertable = false, updatable = false)
+    @Column(name = "date", updatable = false, nullable = false)
     private Date date;
 
     public HystoryCrypto(Cryptocurrency cryptocurrency, Float valore) {
         this.cryptocurrency = cryptocurrency;
         this.valore = valore;
+        this.date = new Date();
     }
 
     public HystoryCrypto() {

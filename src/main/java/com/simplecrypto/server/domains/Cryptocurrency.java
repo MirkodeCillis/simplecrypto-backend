@@ -1,6 +1,8 @@
 package com.simplecrypto.server.domains;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Cryptocurrency {
@@ -16,6 +18,9 @@ public class Cryptocurrency {
 
     @Column(name = "value")
     private Float valore;
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy="cryptocurrency", fetch = FetchType.LAZY)
+    private Set<HystoryCrypto> hystory = new HashSet<>();
 
     public Cryptocurrency(String nome, String codice, Float valore) {
         this.nome = nome;
@@ -57,5 +62,13 @@ public class Cryptocurrency {
 
     public void setValore(Float valore) {
         this.valore = valore;
+    }
+
+    public Set<HystoryCrypto> getHystory() {
+        return hystory;
+    }
+
+    public void setHystory(Set<HystoryCrypto> hystory) {
+        this.hystory = hystory;
     }
 }

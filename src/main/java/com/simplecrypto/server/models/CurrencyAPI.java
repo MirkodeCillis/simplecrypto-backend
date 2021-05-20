@@ -1,4 +1,4 @@
-package com.simplecrypto.server.domains;
+package com.simplecrypto.server.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,10 +10,9 @@ public class CurrencyAPI {
     private String symbol;
 
     @JsonProperty("price")
-    private Double price;
+    private Float price;
 
-
-    public CurrencyAPI(String symbol, Double price) {
+    public CurrencyAPI(String symbol, Float price) {
         this.symbol = symbol;
         this.price = price;
     }
@@ -30,11 +29,11 @@ public class CurrencyAPI {
         this.symbol = symbol;
     }
 
-    public Double getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 }

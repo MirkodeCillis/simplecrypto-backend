@@ -32,6 +32,7 @@ public class HistoryWallet {
     public HistoryWallet(User user, Float valore) {
         this.user = user;
         this.valore = valore;
+        this.date = new Date();
     }
 
     public HistoryWallet() {
