@@ -9,6 +9,7 @@ import com.simplecrypto.server.service.CryptoService;
 import com.simplecrypto.server.service.HistoryCryptoService;
 import com.simplecrypto.server.service.HistoryWalletService;
 import com.simplecrypto.server.service.UserService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -35,12 +36,16 @@ public class Utils {
     @Autowired
     HistoryWalletService historyWalletService;
 
+    @Autowired
+    Logger logger;
+
     public void updateValues() {
 
         RestTemplate restTemplate = new RestTemplate();
 
         Iterable<Cryptocurrency> currencies = cryptoService.findAll();
 
+        logger.info("Getting Cryptocurrencies updates...");
         currencies.forEach(currency -> {
             CurrencyAPI currentValue = restTemplate.getForObject(uriCurrencies + currency.getCodice(), CurrencyAPI.class);
 
@@ -55,6 +60,7 @@ public class Utils {
 
         Iterable<User> users = userService.findAll();
 
+        logger.info("Updating Users wallets...");
         users.forEach(user -> {
             final float[] current_wallet = {0};
             user.getInvestments().forEach(investment -> {
@@ -63,5 +69,6 @@ public class Utils {
             HistoryWallet hw = new HistoryWallet(user, current_wallet[0]);
             historyWalletService.save(hw);
         });
+        logger.info("Done.");
     }
 }

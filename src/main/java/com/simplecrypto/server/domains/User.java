@@ -2,7 +2,6 @@ package com.simplecrypto.server.domains;
 
 import javax.persistence.*;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import java.util.HashSet;
 import java.util.Set;
 

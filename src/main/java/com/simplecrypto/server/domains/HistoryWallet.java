@@ -3,7 +3,6 @@ package com.simplecrypto.server.domains;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
-
 import javax.persistence.*;
 import java.util.Date;
 
