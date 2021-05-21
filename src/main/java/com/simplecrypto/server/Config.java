@@ -40,8 +40,13 @@ public class Config {
                 .build();
     }
 
-    @Scheduled(fixedRateString = "${fixedDelay.in.milliseconds}")
+    @Scheduled(fixedRateString = "${fixedDelay.updatevalues}")
     public void getCryptoValues() {
         utils.updateValues();
+    }
+
+    @Scheduled(cron = "${fixedDelay.removevalues}")
+    public void deleteOldValues() {
+        utils.deleteOldValues();
     }
 }

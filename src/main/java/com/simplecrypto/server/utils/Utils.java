@@ -15,11 +15,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Calendar;
+import java.util.Date;
+
 @Controller
 public class Utils {
 
     @Value("${external.api.currencies}")
     String uriCurrencies;
+
+    @Value("${days.delete.history}")
+    short daysDeleteHystory;
 
     @Autowired
     RestTemplate restTemplate;
@@ -57,6 +63,7 @@ public class Utils {
             HistoryCrypto hc = new HistoryCrypto(currency, currency.getValore());
             historyCryptoService.save(hc);
         });
+        logger.info("Done.");
 
         Iterable<User> users = userService.findAll();
 
@@ -70,5 +77,20 @@ public class Utils {
             historyWalletService.save(hw);
         });
         logger.info("Done.");
+    }
+
+    public void deleteOldValues() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -daysDeleteHystory);
+        Date date = new Date(cal.getTimeInMillis());
+
+        logger.info("Deleting cryptocurrencies values older than " + daysDeleteHystory + " days...");
+        Integer rows = historyCryptoService.deleteOlderThan(date);
+        logger.info("Deleted " + rows + " values from hystory crypto.");
+
+        logger.info("Deleting wallet values older than " + daysDeleteHystory + " days...");
+        rows = historyWalletService.deleteOlderThan(date);
+        logger.info("Deleted " + rows + " values from hystory wallet.");
+
     }
 }

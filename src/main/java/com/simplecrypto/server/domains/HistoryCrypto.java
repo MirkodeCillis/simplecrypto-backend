@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Entity
 public class HistoryCrypto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

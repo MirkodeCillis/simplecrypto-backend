@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Transactional
 @Service("HistoryWalletService")
 public class HistoryWalletService {
@@ -15,5 +17,9 @@ public class HistoryWalletService {
 
     public HistoryWallet save(HistoryWallet historyWallet) {
         return historyWalletRepository.save(historyWallet);
+    }
+
+    public Integer deleteOlderThan(Date date) {
+        return historyWalletRepository.deleteAllByDateLessThan(date);
     }
 }
