@@ -29,6 +29,7 @@ public class Post {
     private Date publishedAt;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy="post", fetch = FetchType.LAZY)
+    @OrderBy("publishedAt ASC")
     private Set<Comment> comments = new HashSet<>();
 
     public Post(User user, String message) {
