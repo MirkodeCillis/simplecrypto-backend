@@ -53,6 +53,7 @@ public class Utils {
 
         logger.info("Getting Cryptocurrencies updates...");
         currencies.forEach(currency -> {
+            if (currency.getCodice().equalsIgnoreCase("EUR")) return;
             CurrencyAPI currentValue = restTemplate.getForObject(uriCurrencies + currency.getCodice(), CurrencyAPI.class);
 
             // update values in cryptocurrency table
