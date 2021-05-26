@@ -34,7 +34,7 @@ public class CommentCtrl {
             @RequestBody CommentModel comment
     ) {
         try {
-            User user = userService.findById(comment.getUserId()).get();
+            User user = userService.findById(comment.getUserId());
             if (user == null) throw new UserNotFoundException("User not found.");
 
             Post post = postService.getById(comment.getPostId()).get();

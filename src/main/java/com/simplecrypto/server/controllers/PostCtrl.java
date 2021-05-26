@@ -32,7 +32,7 @@ public class PostCtrl {
             @RequestBody PostModel post
     ) {
         try {
-            User user = userService.findById(post.getUserId()).get();
+            User user = userService.findById(post.getUserId());
             if (user == null) throw new UserNotFoundException("User not found.");
 
             if (post.getMessage().length() > 255) throw new DataIntegrityViolationException("message too long");

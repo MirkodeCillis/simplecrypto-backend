@@ -47,7 +47,7 @@ public class UserCtrl {
             @PathVariable Integer id
     ) {
         try {
-            User user = userService.findById(id).get();
+            User user = userService.findById(id);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("No User Found", HttpStatus.CONFLICT);

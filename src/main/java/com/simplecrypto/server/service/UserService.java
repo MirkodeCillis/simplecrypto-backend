@@ -8,8 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Transactional
 @Service("UserService")
 public class UserService {
@@ -33,7 +31,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> findById(Integer id) {
-        return userRepository.findById(id);
+    public User findById(Integer id) {
+        return userRepository.findById(id).get();
     }
 }

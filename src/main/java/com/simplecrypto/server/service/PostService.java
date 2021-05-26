@@ -24,7 +24,7 @@ public class PostService {
     public Post save(PostModel postModel) {
 
         Post post = new Post(
-                userService.findById(postModel.getUserId()).get(),
+                userService.findById(postModel.getUserId()),
                 postModel.getMessage());
 
         return postRepository.save(post);

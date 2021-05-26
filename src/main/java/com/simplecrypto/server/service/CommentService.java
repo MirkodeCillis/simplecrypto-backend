@@ -22,7 +22,7 @@ public class CommentService {
 
     public Comment save(CommentModel commentModel) {
         Comment comment = new Comment(
-                userService.findById(commentModel.getUserId()).get(),
+                userService.findById(commentModel.getUserId()),
                 postService.getById(commentModel.getPostId()).get(),
                 commentModel.getMessage()
         );

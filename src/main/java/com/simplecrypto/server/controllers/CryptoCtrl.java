@@ -1,14 +1,18 @@
 package com.simplecrypto.server.controllers;
 
 import com.simplecrypto.server.domains.Cryptocurrency;
+import com.simplecrypto.server.domains.Investment;
+import com.simplecrypto.server.domains.User;
+import com.simplecrypto.server.models.InvestmentModel;
 import com.simplecrypto.server.service.CryptoService;
+import com.simplecrypto.server.service.InvestmentService;
+import com.simplecrypto.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.zip.DataFormatException;
 
 @Controller
@@ -17,6 +21,12 @@ public class CryptoCtrl {
 
     @Autowired
     CryptoService cryptoService;
+
+    @Autowired
+    InvestmentService investmentService;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping(path = "/prices")
     public ResponseEntity<?> getAllPrices() {
@@ -41,6 +51,32 @@ public class CryptoCtrl {
             return new ResponseEntity<>("Code not valid", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(path = "/buy")
+    public ResponseEntity<?> buyCrypto(@RequestBody InvestmentModel investmentModel) {
+        try {
+            if (investmentModel.getCrypto_id() == null || investmentModel.getUser_id() == null)
+                return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
+
+            Cryptocurrency cryptocurrency = cryptoService.findById(investmentModel.getCrypto_id());
+            User user = userService.findById(investmentModel.getUser_id());
+
+            Investment prevInvestment = investmentService.findByCryptoAndUser(
+                    cryptocurrency,
+                    user
+            );
+
+            if (prevInvestment == null) {
+                Investment investment = new Investment(user, cryptocurrency, investmentModel.getImporto());
+                return new ResponseEntity<>(investmentService.save(investment), HttpStatus.OK);
+            }
+
+            prevInvestment.setImporto(prevInvestment.getImporto() + Math.abs(investmentModel.getImporto()));
+            return new ResponseEntity<>(investmentService.save(prevInvestment), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -24,4 +24,8 @@ public class CryptoService {
     public Cryptocurrency findByCodice(String codice) {
         return cryptoRepository.findByCodice(codice);
     }
+
+    public Cryptocurrency findById(Integer id) {
+        return cryptoRepository.findById(id).get();
+    }
 }
