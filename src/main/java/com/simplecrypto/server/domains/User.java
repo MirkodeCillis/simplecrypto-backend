@@ -27,6 +27,7 @@ public class User {
     private Set<Investment> investments = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy="user", fetch = FetchType.EAGER)
+    @OrderBy("date ASC")
     private Set<HistoryWallet> historyWallet = new HashSet<>();
 
     public User(String username, String email, String password) {
