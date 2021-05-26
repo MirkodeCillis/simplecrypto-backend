@@ -42,4 +42,16 @@ public class UserCtrl {
         return userService.findAll();
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getUser (
+            @PathVariable Integer id
+    ) {
+        try {
+            User user = userService.findById(id).get();
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("No User Found", HttpStatus.CONFLICT);
+        }
+    }
+
 }
