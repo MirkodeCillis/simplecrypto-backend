@@ -7,7 +7,7 @@ import java.util.Set;
 @Entity
 public class Cryptocurrency {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(length = 30, nullable = false, unique = true)
