@@ -68,6 +68,8 @@ public class CryptoCtrl {
                     user
             );
 
+            investmentService.payInEuro(investmentModel);
+
             if (prevInvestment == null) {
                 Investment investment = new Investment(user, cryptocurrency, investmentModel.getImporto());
                 return new ResponseEntity<>(investmentService.save(investment), HttpStatus.OK);
