@@ -24,6 +24,7 @@ public class User {
     private String password;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy="user", fetch = FetchType.EAGER)
+    @OrderBy("cryptocurrency.id ASC ")
     private Set<Investment> investments = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy="user", fetch = FetchType.EAGER)

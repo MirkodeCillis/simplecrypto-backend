@@ -79,4 +79,42 @@ public class CryptoCtrl {
             return new ResponseEntity("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping(path = "/sell")
+    public ResponseEntity<?> sellCrypto(@RequestBody InvestmentModel investmentModel) {
+        try {
+            if (investmentModel.getCrypto_id() == null || investmentModel.getUser_id() == null)
+                return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
+
+            Cryptocurrency cryptocurrency = cryptoService.findById(investmentModel.getCrypto_id());
+            User user = userService.findById(investmentModel.getUser_id());
+
+            Investment prevInvestment = investmentService.findByCryptoAndUser(
+                    cryptocurrency,
+                    user
+            );
+
+            if (prevInvestment == null) {
+                return new ResponseEntity<>("Can't sell asset you don't own", HttpStatus.CONFLICT);
+            }
+
+            investmentModel.setImporto((float) (investmentModel.getImporto() * 0.99));
+
+            if (prevInvestment.getImporto() < investmentModel.getImporto())
+                return new ResponseEntity<>("Can't sell more asset than you own", HttpStatus.CONFLICT);
+
+            // new value of asset quantity
+            prevInvestment.setImporto(prevInvestment.getImporto() - Math.abs(investmentModel.getImporto()));
+
+            //update in Euro
+
+            investmentModel.setCrypto_id(7);
+            investmentModel.setImporto(investmentModel.getImporto() * cryptocurrency.getValore());
+            buyCrypto(investmentModel);
+
+            return new ResponseEntity<>(investmentService.save(prevInvestment), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
