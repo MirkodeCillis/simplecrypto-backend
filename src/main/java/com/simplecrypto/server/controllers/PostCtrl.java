@@ -46,7 +46,7 @@ public class PostCtrl {
 
     @GetMapping(path = "/getlist")
     public ResponseEntity<?> getAllPosts(
-            @PageableDefault(value = 15, sort = "publishedAt", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(value = 10, sort = "publishedAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         try {
             Page<Post> posts = postService.getAll(pageable);
