@@ -1,4 +1,4 @@
-FROM openjdk:1.8-jdk-alpine
+FROM openjdk:8-alpine
 EXPOSE 8855
 MAINTAINER mirkodecillis
 COPY target/simplecrypto-server-1.0.0.jar simplecrypto-server-1.0.0.jar

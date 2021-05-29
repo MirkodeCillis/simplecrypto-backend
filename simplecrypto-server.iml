@@ -12,6 +12,7 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="entityManagerFactory" />
+          <factory-entry name="simplecrypto-server" value="9aa0402d-2d57-47a6-a71a-4b96ab110a67" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>
