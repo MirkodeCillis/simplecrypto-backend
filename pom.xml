@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.simplecrypto.server</groupId>
     <artifactId>simplecrypto-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>simplecrypto-server</name>
     <description>Server per simulatore di portafoglio di criptovalute</description>
     <properties>
