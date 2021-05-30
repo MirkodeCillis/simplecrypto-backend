@@ -1,19 +1,14 @@
-FROM maven:3-jdk-8
-FROM openjdk:8-alpine
+# Step : Test and package
+FROM maven:3.5.3-jdk-8-alpine as target
+WORKDIR /build
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-ENV HOME=/home/usr/app
-RUN mkdir -p $HOME
-WORKDIR $HOME
+COPY src/ /build/src/
+RUN mvn package
 
-# 1. add pom.xml only here
-ADD pom.xml $HOME
-
-# 2. start downloading dependencies
-RUN mvn verify clean --fail-never
-
-# 3. add all source code and start compiling
-ADD . $HOME
-RUN ["mvn", "package"]
+# Step : Package image
+FROM openjdk:8-jre-alpine
 EXPOSE 8855
-
-CMD ["java", "-jar", "./target/simplecrypto-server-1.0.0.jar"]
+CMD exec java -jar /app/simplecrypto-server-1.0.0.jar
+COPY --from=target /build/target/*jar-with-dependencies.jar /app/simplecrypto-server-1.0.0.jar
