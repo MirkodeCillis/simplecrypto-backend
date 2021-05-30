@@ -10,5 +10,5 @@ RUN mvn clean install
 # Step : Package image
 FROM openjdk:8-jre-alpine
 EXPOSE 8855
-CMD exec java -jar /app/simplecrypto-server-1.0.0.jar
+CMD exec java -jar /app/simplecrypto-server-1.0.0.jar --spring.profiles.active=prod
 COPY --from=target /build/target/simplecrypto-server-1.0.0.jar /app/simplecrypto-server-1.0.0.jar
