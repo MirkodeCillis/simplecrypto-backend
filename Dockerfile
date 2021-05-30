@@ -1,3 +1,4 @@
+FROM maven:3-jdk-8
 FROM openjdk:8-alpine
 
 ENV HOME=/home/usr/app
