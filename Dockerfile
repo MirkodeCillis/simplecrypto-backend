@@ -9,7 +9,7 @@ WORKDIR $HOME
 ADD pom.xml $HOME
 
 # 2. start downloading dependencies
-RUN ["/usr/local/bin/mvn-entrypoint.sh", "mvn", "verify", "clean", "--fail-never"]
+RUN mvn verify clean --fail-never
 
 # 3. add all source code and start compiling
 ADD . $HOME
