@@ -35,6 +35,8 @@ public class InvestmentService {
         User user = userService.findById(investmentModel.getUser_id());
         Cryptocurrency euro = cryptoService.findById(7);
         Investment euroDeposit = findByCryptoAndUser(euro, user);
+        if (euroDeposit == null)
+            euroDeposit = new Investment(user, euro, (float) 0);
 
         Float importo = investmentModel.getImporto() * cryptocurrency.getValore();
         Float remainingEuro = euroDeposit.getImporto() - importo;
